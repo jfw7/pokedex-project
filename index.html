@@ -1,0 +1,48 @@
+<html>
+
+<head>
+    <script src="https://unpkg.com/alpinejs" defer></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+</head>
+
+<body>
+    <div x-data="pokedex_project">
+        <input type="number" x-model.number="id" min=1>
+        <div x-show="id">
+            <h1 x-text="getPokemon().name.english"></h1>
+            <h2 x-text='getPokemon().species'></h2>
+            <div x-text="`evolves from ${getPokemon().evolution.prev[0] - 1].name.english}`">
+            </div>
+            <div x-text="`evolves to ${getPokemon().evolution.next[0][0] - 1].name.english}`">
+            </div>
+
+            <p x-text="getPokemon().description"></p>
+            <img x-bind:src="getPokemon().image.hires" />
+            <h3>Types:</h3>
+            <ul>
+                <template x-for="type in getPokemon().type">
+                    <li x-text="type"></li>
+                </template>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('pokedex_project', () => ({
+                id: 1,
+                pokedex: [],
+                getPokemon() {
+                    // this code looks through the "pokedex" array and finds the entry matching our ID
+                    return this.pokedex.find(({ id }) => id === this.id);
+                },
+                async init() {
+                    // this code downloads the pokedex dataset from github
+                    this.pokedex = await (await fetch('https://raw.githubusercontent.com/Purukitto/pokemon-data.json/refs/heads/master/pokedex.json')).json();
+                }
+            }))
+        })
+    </script>
+</body>
+
+</html>
