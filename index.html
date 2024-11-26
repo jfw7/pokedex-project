@@ -10,10 +10,11 @@
         <input type="number" x-model.number="id" min=1>
         <div x-show="id">
             <h1 x-text="getPokemon().name.english"></h1>
-            <h2 x-text='getPokemon().species'></h2>
-            <div x-text="`evolves from ${getPokemon().evolution.prev[0] - 1].name.english}`">
+            <div
+                x-text="`evolves from ${pokedex.find(({ id }) => id === Number(getPokemon().evolution.prev[0])).name.english}`">
             </div>
-            <div x-text="`evolves to ${getPokemon().evolution.next[0][0] - 1].name.english}`">
+            <div
+                x-text="`evolves to ${pokedex.find(({ id }) => id === Number(getPokemon().evolution.next[0][0])).name.english}`">
             </div>
 
             <p x-text="getPokemon().description"></p>
